@@ -16,7 +16,7 @@ Ruby のプロファイラで Cbench のボトルネックを解析しよう。
 
 ##方針
 
-今回はプロファイラとして ruby-prof を用いる。ruby-prof で cbench コントローラのボトルネックを発見するために、ターミナルで以下のコマンドを実行した。なお、計測結果を result.txt に出力するようにしている。
+今回はプロファイラとして ruby-prof を用いる。ruby-prof で cbench コントローラのボトルネックを発見するために、ターミナルで以下のコマンドを実行した。なお、計測結果を [result.txt](https://raw.githubusercontent.com/handai-trema/cbench-Takuya-Saitoh/master/result.txt)に出力するようにしている。
 
 ```
 $ ruby-prof ./bin/trema run ./lib/cbench.rb > result.txt
