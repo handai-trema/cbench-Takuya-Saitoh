@@ -16,7 +16,7 @@ Ruby のプロファイラで Cbench のボトルネックを解析しよう。
 
 ##方針
 
-今回はプロファイラとして ruby-prof を用いる。ruby-prof で cbench コントローラのボトルネックを発見するために、ターミナルで以下のコマンドを実行した。なお、計測結果を [result.txt](https://raw.githubusercontent.com/handai-trema/cbench-Takuya-Saitoh/master/result.txt)に出力するようにしている。
+今回はプロファイラとして ruby-prof を用いる。ruby-prof で cbench コントローラのボトルネックを発見するために、ターミナルで以下のコマンドを実行した。なお、計測結果を result.txt に出力するようにしている。
 
 ```
 $ ruby-prof ./bin/trema run ./lib/cbench.rb > result.txt
@@ -50,7 +50,7 @@ cbench: controller benchmarking tool
 RESULT: 1 switches 9 tests min/max/avg/stdev = 3.35/7.17/5.01/1.21 responses/s
 ```
 
-次に、 ruby-prof による cbench コントローラの解析結果の一部を以下に掲載する。
+次に、 ruby-prof による cbench コントローラの解析結果の一部を以下に掲載する (全結果は[こちら](https://raw.githubusercontent.com/handai-trema/cbench-Takuya-Saitoh/master/result.txt))。
 
 ```
 * indicates recursively called methods
@@ -83,21 +83,3 @@ Sort by: self_time
 ```
 
 一番左の項目である %self は、プロセス全体の中で name のメソッドの処理に費やされた時間の割合を表している。つまりこの値が大きいメソッドは、プロセスにおけるボトルネックになっていると言えるのである。また、 ruby-prof のこの計測結果は、 %self が大きい順にデータを表示していて、上記の %self が大きいメソッドを見てみると、その多くが BinData 関連のメソッドであることがわかる。 BinData とは ruby においてバイナリデータを扱う際に使用される gem である。ここで、 cbench コントローラは Packet In を受け取ると Flow Mod を返すという単純な動作しかしないところから、これら BinData 関連のメソッドは、 cbench コントローラが受け取った Packet In のバイナリデータを読み取ったり、生成した Flow Mod を cbench プロセスに送信する際にバイナリデータに変換する時に呼び出されていると推測される。したがって、これらバイナリデータを扱う処理が cbench コントローラのボトルネックになっていると考えられる。
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
